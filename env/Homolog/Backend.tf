@@ -1,8 +1,5 @@
 terraform {
-  backend "s3" {
-    key          = "Homolog/terraform.tfstate"
-    region       = "us-west-2"
-    encrypt      = true
-    use_lockfile = true
+  backend "local" {
+    path = "terraform.tfstate"
   }
 }
