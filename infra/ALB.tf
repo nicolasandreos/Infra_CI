@@ -1,7 +1,9 @@
 resource "aws_lb" "alb" {
-  name               = "ECS-Go"
-  security_groups    = [aws_security_group.alb.id]
-  subnets            = module.vpc.public_subnets
+  name            = "ECS-Go"
+  security_groups = [aws_security_group.alb.id]
+  subnets         = module.vpc.public_subnets
+
+  depends_on = [module.vpc]
 }
 
 resource "aws_lb_listener" "http" {
@@ -15,13 +17,19 @@ resource "aws_lb_listener" "http" {
 }
 
 resource "aws_lb_target_group" "alvo" {
-  name        = "ECS-Go"
-  port        = 8000
-  protocol    = "HTTP"
-  target_type = "ip"
-  vpc_id      = module.vpc.vpc_id
+  name                 = "ECS-Go"
+  port                 = local.app_port
+  protocol             = "HTTP"
+  target_type          = "ip"
+  vpc_id               = module.vpc.vpc_id
+  deregistration_delay = 30
   health_check {
-    path = "/leo"
+    path                = "/nicolas"
+    matcher             = "200"
+    interval            = 15
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
   }
 }
 

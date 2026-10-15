@@ -1,10 +1,15 @@
-module "homolog" {
-    source = "../../infra"
+variable "imagem" {
+  type        = string
+  description = "Imagem Docker no formato usuario/repositorio:tag"
+}
 
-    nome_repositorio = "homolog"
-    cargoIAM = "homolog"
-    ambiante = "homolog"
-    imagem="leonardosartorello/go_ci:22"
+module "homolog" {
+  source = "../../infra"
+
+  nome_repositorio = "homolog"
+  cargoIAM         = "homolog"
+  ambiante         = "homolog"
+  imagem           = var.imagem
 }
 
 output "IP_alb" {

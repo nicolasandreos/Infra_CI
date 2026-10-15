@@ -7,10 +7,9 @@ resource "aws_iam_role" "cargo" {
       {
         Action = "sts:AssumeRole"
         Effect = "Allow"
-        Sid    = ""
         Principal = {
           Service = ["ec2.amazonaws.com",
-                     "ecs-tasks.amazonaws.com"]
+          "ecs-tasks.amazonaws.com"]
         }
       },
     ]
@@ -34,6 +33,11 @@ resource "aws_iam_role_policy" "ecs_ecr" {
       },
     ]
   })
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_exec" {
+  role       = aws_iam_role.cargo.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
 resource "aws_iam_instance_profile" "perfil" {
